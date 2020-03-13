@@ -141,7 +141,7 @@ $(document).ready(function () {
         //run the score screen if all questions answered
         if ((correct + wrong + unanswered) === 4) {
             $("#questionsGoHere").empty();
-            $("#questionsGoHere").html("<h3>Game Over!! Here are your results: </h3>");
+            $("#questionsGoHere").html("<h3>Game Over! Here are your results: </h3>");
             $("#answersGoHere").append("<h4> Correct: " + correct + "</h4>" );
             $("#answersGoHere").append("<h4> Incorrect: " + wrong + "</h4>" );
             $("#answersGoHere").append("<h4> Unanswered: " + unanswered + "</h4>" );
