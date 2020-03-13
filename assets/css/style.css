@@ -15,7 +15,6 @@ body {
         rgba(35,43,85,0.95));
        
     border: none;
-    height: 600px;
 }
 
 .card-title {
@@ -41,7 +40,7 @@ body {
     background-color: rgba(255,255,255,0.1);
   }
 
-.btn-start {
+.btn-play {
     border-radius: 8px;
     border: 1px solid #ffffff;
     /* background:#06060C; */
@@ -52,7 +51,7 @@ body {
     width: 300px;
 }
 
-.question h4 {
+.question h3 {
     margin: 40px 0;
     font-weight: 100;
 }

@@ -1,84 +1,89 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $("#correct").hide()
-    $("#wrong").hide()
-    $("#unanswered").hide()
     var correct = 0;
     var wrong = 0;
     var unanswered = 0;
-    var questionIndex = 0;
-    var number = 10;
     var intervalId;
+    var running = false;
+    var timer = 15;
+    var questionIndex = 0;
+    var select;
+    var index;
+    var newArray = [];
+    var holder = [];
     var scoreCount = wrong + correct + unanswered;
+
 
     var triviaQs = [
         {
             question: 'What year was the very first model of the iPhone released?',
             choices: ['2005', '2007', '2004', '2009'],
-            images: "../images/coding.webp",
+            images: "./assets/images/phone.jpeg",
             correct: '2007'
         },
         {
             question: 'What is often seen as the smallest unit of memory?',
             choices: ['microbyte', 'millabyte', 'kilobyte', 'byte'],
-            images: "../images/coding.webp",
+            images: "./assets/images/byte.png",
             correct: 'kilobyte'
         },
         {
             question: 'What was Twitter’s original name?',
             choices: ['twttr', 'twitters', 'chirrup', 'tweeter'],
-            images: "../images/coding.webp",
+            images: "./assets/images/twitter_512.png",
             correct: 'twttr'
         },
         {
             question: 'The TITLE tag must be within the ________ tags in the HTML.',
             choices: ['title', 'form', 'head', 'body'],
-            images: "../images/coding.webp",
+            images: "./assets/images/head.gif",
             correct: 'head'
         },
 
-    ]
+    ];
 
-
-
-    function runTimer() {
-
-    clearInterval(intervalId);
-    intervalId = setInterval(decrement, 1000);
-
-    };
-
-
-    function decrement() {
-        number--;
-        $("#show-timer").html("<h3>Time Remaining: " + number + "</h3>");
-  
-        if (number === 0) {
-  
-          stop();
-          unanswered ++
-          scoreCount ++
-          checkScoreCount();
-          $('#unanswered').text('Unanswered: ' + unanswered)
-        //   alert("Time Up!");
-          alert("The correct answer is " + triviaQs[questionIndex].correct)
-        }
-      };
     
+    $("#reset").hide();
 
-    function stop() {
-        clearInterval(intervalId)
-      };
-      
-    function reset() {
-        clearInterval(intervalId)
-        number = 10;
-        displayQuestion();
-        runTimer();
+    //click start button to start game
+    $("#start").on("click", function () {
+            $("#start").hide();
+            displayQuestion();
+            runTimer();
+            for(var i = 0; i < triviaQs.length; i++) {
+        holder.push(triviaQs[i]);
     }
-
-
+        })
+    //start timer
+    function runTimer(){
+        if (!running) {
+        intervalId = setInterval(decrement, 1000); 
+        running = true;
+        }
+    }
+    //timer decrement
+    function decrement() {
+        $("#show-timer").html("<h4>Time remaining: " + timer + "</h4>");
+        timer --;
+    
+        //at 0, stop the timer
+        if (timer === 0) {
+            unanswered++;
+            scoreCount++;
+            stop();
+            $("#answersGoHere").html("<p>Time is up! The correct answer is: " + triviaQs[questionIndex].correct + "</p>");
+            picture();
+        }	
+    }
+    
+    //stop the timer
+    function stop() {
+        running = false;
+        clearInterval(intervalId);
+    }
+   
     function displayQuestion() {
+    
         $('#questionsGoHere').empty()     
 
         var containerDiv = $('<div>');
@@ -99,92 +104,73 @@ $(document).ready(function() {
         $('#questionsGoHere').append(containerDiv)
     }
 
-    // console.log('is this my first question! ????', triviaQs[0])
-
-    startGame();
-
-    function startGame() {
-
-    $("#start").on("click", function(){
-        displayQuestion()
-        $("#start").hide()
-        $("#correct").show()
-        $("#wrong").show()
-        $("#unanswered").show()
-        runTimer();
-        
-
-      });
-
-    }
-
-
-      $(document).on('click', '.btnChoice', function() {
-          console.log('U CLICKED A CHOICE!!!!!!', $(this).attr('name'))
-
-          if($(this).attr('name') === triviaQs[questionIndex].correct) {
-              alert('U GOT IT RIGHT!!!')
-              correct ++
-              scoreCount++
-              checkScoreCount();
-            //   questionIndex ++
-            // $('#correct').text('Correct: ' + correct)
-            
-            // $('#answersGoHere').text("That's correct!")
-            // displayQuestion()
-            // reset();
-            // runTimer();
-
-            } 
-            
-          else if($(this).attr('name') !== triviaQs[questionIndex].correct)  {
-            alert("The correct answer is " + triviaQs[questionIndex].correct);
-            // $('#questionsGoHere').hide()
-            // $('#answersGoHere').append("The correct answer is " + triviaQs[questionIndex].correct)
-              wrong ++
-              scoreCount++
-              checkScoreCount();
-            //   questionIndex ++
-            //   $('#wrong').text('Wrong: ' + wrong)
-            //   displayQuestion()
-            //   reset();
-            //   runTimer();
-          }
-
-        
-      })
-
-
-
-
-      function checkScoreCount() {
-        if (scoreCount === 4) {
-
-            var scoreResults = $('<p>');
-            var containerDiv = $('<div>');
-
-            scoreResults.html("Game Over")
-            containerDiv.append(scoreResults)
-            console.log(scoreResults)
-
-            $('#wrong').text('Wrong: ' + wrong)
-            $('#correct').text('Correct: ' + correct)
-            $('#unanswered').text('Unanswered: ' + unanswered)
-            stop();
-            $('#questionsGoHere').hide()
-            $("#show-timer").hide()
-            startGame();
-
-            }
-        else {
-            questionIndex ++
-            reset();
-        }
     
-      }
-     
-
-
-
-})
-
+    
+    
+    //clicking the choices of each question
+    $(document).on('click', '.btnChoice', function() {
+ 
+        //if the answer chosen by user is correct
+        if ($(this).attr('name') === triviaQs[questionIndex].correct) {
+            stop();
+            correct++;
+            scoreCount++;
+            $("#answersGoHere").html("<p>Correct!</p>");
+            picture();
+            
+        //if the answer chosen by user is wrong
+        } else {
+            stop();
+            wrong++;
+            scoreCount++;
+            $("#answersGoHere").html("<p>Wrong! The correct answer is: " + triviaQs[questionIndex].correct + "</p>");
+            picture();
+        }
+    });
+    
+    
+    function picture(hidepic) {
+        $("#answersGoHere").append("<img src=" + triviaQs[questionIndex].images + ">");
+        newArray.push(select);
+        triviaQs.splice(index,1);
+    
+        var hidepic = setTimeout(function() {
+            $("#answersGoHere").empty();
+            timer= 15;
+    
+        //run the score screen if all questions answered
+        if ((correct + wrong + unanswered) === 4) {
+            $("#questionsGoHere").empty();
+            $("#questionsGoHere").html("<h3>Game Over!! Here are your results: </h3>");
+            $("#answersGoHere").append("<h4> Correct: " + correct + "</h4>" );
+            $("#answersGoHere").append("<h4> Incorrect: " + wrong + "</h4>" );
+            $("#answersGoHere").append("<h4> Unanswered: " + unanswered + "</h4>" );
+            $("#show-timer").hide();
+            $("#reset").show();
+            correct = 0;
+            wrong = 0;
+            unanswered = 0;
+        } 
+        else {
+            runTimer();
+            displayQuestion();
+    
+        }
+        }, 2000);
+    
+    
+    }
+    
+    $("#reset").on("click", function() {
+        $("#reset").hide();
+        $("#answersGoHere").empty();
+        $("#questionsGoHere").empty();
+        for(var i = 0; i < holder.length; i++) {
+            triviaQs.push(holder[i]);
+        }
+        runTimer();
+        displayQuestion();
+    
+    });
+    
+    });
