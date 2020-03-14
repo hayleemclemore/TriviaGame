@@ -42,7 +42,18 @@ $(document).ready(function () {
 
     ];
 
+    $("#reset").on("click", function() {
+        $("#reset").hide();
+        $("#answersGoHere").empty();
+        $("#questionsGoHere").empty();
+        for(var i = 0; i < holder.length; i++) {
+            triviaQs.push(holder[i]);
+        }
+        runTimer();
+        displayQuestion();
     
+    });
+
     $("#reset").hide();
 
     //click start button to start game
@@ -83,7 +94,6 @@ $(document).ready(function () {
     }
    
     function displayQuestion() {
-    
         $('#questionsGoHere').empty()     
 
         var containerDiv = $('<div>');
@@ -143,34 +153,21 @@ $(document).ready(function () {
             $("#questionsGoHere").empty();
             $("#questionsGoHere").html("<h3>Game Over! Here are your results: </h3>");
             $("#answersGoHere").append("<h4> Correct: " + correct + "</h4>" );
-            $("#answersGoHere").append("<h4> Incorrect: " + wrong + "</h4>" );
+            $("#answersGoHere").append("<h4> Wrong: " + wrong + "</h4>" );
             $("#answersGoHere").append("<h4> Unanswered: " + unanswered + "</h4>" );
             $("#show-timer").hide();
             $("#reset").show();
-            correct = 0;
             wrong = 0;
+            correct = 0;
             unanswered = 0;
         } 
         else {
             runTimer();
             displayQuestion();
-    
         }
         }, 2000);
     
     
     }
-    
-    $("#reset").on("click", function() {
-        $("#reset").hide();
-        $("#answersGoHere").empty();
-        $("#questionsGoHere").empty();
-        for(var i = 0; i < holder.length; i++) {
-            triviaQs.push(holder[i]);
-        }
-        runTimer();
-        displayQuestion();
-    
-    });
     
     });
