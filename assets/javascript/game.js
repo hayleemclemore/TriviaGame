@@ -23,7 +23,7 @@ $(document).ready(function () {
         },
         {
             question: 'What is often seen as the smallest unit of memory?',
-            choices: ['microbyte', 'millabyte', 'kilobyte', 'byte'],
+            choices: ['microbyte', 'millabyte', 'kilobyte', 'gigabyte'],
             images: "./assets/images/byte.png",
             correct: 'kilobyte'
         },
